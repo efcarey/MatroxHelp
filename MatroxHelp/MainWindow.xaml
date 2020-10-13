@@ -1,0 +1,64 @@
+﻿<Window x:Class="MatroxHelp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mil="clr-namespace:Matrox.MatroxImagingLibrary.Controls;assembly=Matrox.MatroxImagingLibrary"
+        xmlns:behaviors="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"       
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="500"
+        Width="640">
+    
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Closing">
+            <behaviors:InvokeCommandAction Command="{Binding CloseCommand}"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <!--<Button Content="Toggle Grab"
+                Grid.Column="0"
+                Command="{Binding ToggleGrabCommand}">            
+        </Button>-->
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Grid.Column="1">
+            
+            <Button Content="Calibrate From Image"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CalibrateFromImageCommand}">
+            </Button>
+
+            <!--<Button Content="Calibrate from Digitizer"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CalibrateFromDigitizerCommand}">
+            </Button>-->
+
+            <Button Content="PVA Calibrate"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CalibrateToPVACommand}"
+                    IsEnabled="{Binding IsCalibrated}">
+            </Button>
+
+        </StackPanel>
+        
+        <Border Grid.Row="1"
+                Grid.ColumnSpan="2">
+            <mil:MILWPFDisplay DisplayId="{Binding DisplayID}">
+            </mil:MILWPFDisplay>
+        </Border>
+
+    </Grid>
+</Window>
