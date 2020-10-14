@@ -55,8 +55,10 @@ namespace MatroxHelp
             MIL.McalAlloc(_system, MIL.M_PERSPECTIVE_TRANSFORMATION, MIL.M_DEFAULT, ref _pvaCalibration);
 
             // Digitizer testing
-            // // Allocate digitizer
-            // MIL.MdigAlloc(_system, MIL.M_DEV0, "M_DEFAULT", MIL.M_DEV_NUMBER, ref _digitizer);
+            // Allocate digitizer
+            MIL.MdigAlloc(_system, MIL.M_DEV0, "M_DEFAULT", MIL.M_DEV_NUMBER, ref _digitizer);
+            MIL.MbufRestore(@".\CalImage.png", _system, ref _buffer);
+
             // 
             // // Inquire the _digitizer to determine the image buffer size.
             // MIL_INT bufferSizeX;
@@ -366,19 +368,23 @@ namespace MatroxHelp
 
             var pixelPointsX = new double[numPoints];
             var pixelPointsY = new double[numPoints];
+
             var worldPointsX = new double[numPoints];
             var worldPointsY = new double[numPoints];
+            var worldPointsZ = new double[numPoints];
 
             MIL.McalInquire(_calibration, MIL.M_CALIBRATION_IMAGE_POINTS_X, ref pixelPointsX[0]);
             MIL.McalInquire(_calibration, MIL.M_CALIBRATION_IMAGE_POINTS_Y, ref pixelPointsY[0]);
             MIL.McalInquire(_calibration, MIL.M_CALIBRATION_WORLD_POINTS_X, ref worldPointsX[0]);
             MIL.McalInquire(_calibration, MIL.M_CALIBRATION_WORLD_POINTS_Y, ref worldPointsY[0]);
 
-            var alignedPointsX = new double[2];
-            var alignedPointsY = new double[2];
+            var alignedPointsX = new double[numPoints];
+            var alignedPointsY = new double[numPoints];
+            var alignedPointsZ = new double[numPoints];
 
             // TODO: How do I get the translated points like in DA when you call 
             // MIL.McalTransformCoordinateList(_calibration, _calibration, MIL.M_WORLD_TO_RELATIVE, 2, worldPointsX, worldPointsY, alignedPointsX, alignedPointsY);
+            MIL.McalTransformCoordinate3dList(_calibration, MIL.M_ABSOLUTE_COORDINATE_SYSTEM, MIL.M_RELATIVE_COORDINATE_SYSTEM, numPoints, worldPointsX, worldPointsY, worldPointsZ, alignedPointsX, alignedPointsY, alignedPointsZ, MIL.M_DEFAULT);
 
             // Clear old graphics
             MIL.MgraClear(MIL.M_DEFAULT, _calibrationGraphics);
@@ -400,7 +406,7 @@ namespace MatroxHelp
             MIL.McalDraw(_calibrationGraphicsContext, _pvaCalibration, _calibrationGraphics, MIL.M_DRAW_RELATIVE_COORDINATE_SYSTEM + MIL.M_DRAW_AXES, MIL.M_DEFAULT, MIL.M_DEFAULT);
 
             // Associate final PVA calibration
-            // MIL.McalAssociate(_pvaCalibration, _buffer, MIL.M_DEFAULT);
+            MIL.McalAssociate(_pvaCalibration, _buffer, MIL.M_DEFAULT);
 
             // Associate calibration graphics to display
             MIL.MdispControl(_display, MIL.M_ASSOCIATED_GRAPHIC_LIST_ID, _calibrationGraphics);

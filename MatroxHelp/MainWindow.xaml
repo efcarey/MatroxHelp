@@ -27,10 +27,10 @@
         </Grid.RowDefinitions>
 
 
-        <!--<Button Content="Toggle Grab"
+        <Button Content="Toggle Grab"
                 Grid.Column="0"
                 Command="{Binding ToggleGrabCommand}">            
-        </Button>-->
+        </Button>
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
@@ -41,10 +41,10 @@
                     Command="{Binding CalibrateFromImageCommand}">
             </Button>
 
-            <!--<Button Content="Calibrate from Digitizer"
+            <Button Content="Calibrate from Digitizer"
                     HorizontalAlignment="Right"
                     Command="{Binding CalibrateFromDigitizerCommand}">
-            </Button>-->
+            </Button>
 
             <Button Content="PVA Calibrate"
                     HorizontalAlignment="Right"
